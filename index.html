@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Al-Nakheel | النخيل – Luxury Arabic Restaurant</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Amiri:wght@400;700&family=Noto+Kufi+Arabic:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   :root {
     --gold: #C9A84C;
@@ -731,53 +732,41 @@
         <div id="paymentContent">
           <div class="form-group">
             <label data-en="FULL NAME" data-ar="الاسم الكامل">FULL NAME</label>
-            <input class="form-input" id="payName" placeholder="Enter your name" type="text">
+            <input class="form-input" id="payName" placeholder="Enter your full name" type="text">
           </div>
           <div class="form-group">
             <label data-en="PHONE NUMBER" data-ar="رقم الهاتف">PHONE NUMBER</label>
             <input class="form-input" id="payPhone" placeholder="+91 XXXXX XXXXX" type="tel">
           </div>
           <div class="form-group">
+            <label>EMAIL (Optional)</label>
+            <input class="form-input" id="payEmail" placeholder="you@email.com" type="email">
+          </div>
+          <div class="form-group">
             <label data-en="DELIVERY ADDRESS" data-ar="عنوان التوصيل">DELIVERY ADDRESS</label>
             <input class="form-input" id="payAddr" placeholder="Full delivery address" type="text">
           </div>
-          <div class="payment-tabs">
-            <div class="payment-tab active" onclick="switchPayTab('upi',this)" data-en="UPI Payment" data-ar="الدفع عبر UPI">UPI Payment</div>
-            <div class="payment-tab" onclick="switchPayTab('card',this)" data-en="Card Payment" data-ar="بطاقة ائتمان">Card Payment</div>
+          <div style="margin:25px 0 20px;">
+            <div style="font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">ORDER SUMMARY</div>
+            <div id="rzpOrderSummary" style="border:1px solid rgba(201,168,76,0.15);padding:15px;background:rgba(201,168,76,0.04);font-size:0.83rem;color:var(--text-light);line-height:2;"></div>
           </div>
-          <div id="upiSection">
-            <div class="upi-section">
-              <div class="upi-logo">📱</div>
-              <div class="upi-id">alnakheel@upi</div>
-              <div class="upi-note" data-en="Scan QR or use UPI ID to pay" data-ar="امسح رمز QR أو استخدم معرف UPI للدفع">Scan QR or use UPI ID to pay</div>
-              <div style="width:140px;height:140px;background:var(--dark3);border:1px solid rgba(201,168,76,0.3);margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--text-muted);">QR CODE</div>
-            </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding:16px 20px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);">
+            <span style="color:var(--text-muted);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;">ORDER TOTAL</span>
+            <span style="color:var(--gold);font-family:var(--font-display);font-size:1.4rem;font-weight:700;" id="payTotal">₹0</span>
           </div>
-          <div id="cardSection" style="display:none;">
-            <div class="form-group">
-              <label>CARD NUMBER</label>
-              <input class="form-input" placeholder="1234 5678 9012 3456" type="text" maxlength="19">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>EXPIRY</label>
-                <input class="form-input" placeholder="MM/YY" type="text" maxlength="5">
-              </div>
-              <div class="form-group">
-                <label>CVV</label>
-                <input class="form-input" placeholder="XXX" type="text" maxlength="3">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>CARDHOLDER NAME</label>
-              <input class="form-input" placeholder="Name on card" type="text">
-            </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;align-items:center;">
+            <span style="font-size:0.65rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Accepted:</span>
+            <span style="background:var(--dark3);border:1px solid rgba(201,168,76,0.2);padding:5px 12px;font-size:0.72rem;color:var(--text-light);">💳 Cards</span>
+            <span style="background:var(--dark3);border:1px solid rgba(201,168,76,0.2);padding:5px 12px;font-size:0.72rem;color:var(--text-light);">📱 UPI</span>
+            <span style="background:var(--dark3);border:1px solid rgba(201,168,76,0.2);padding:5px 12px;font-size:0.72rem;color:var(--text-light);">🏦 Net Banking</span>
+            <span style="background:var(--dark3);border:1px solid rgba(201,168,76,0.2);padding:5px 12px;font-size:0.72rem;color:var(--text-light);">👛 Wallets</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding:15px;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.1);">
-            <span style="color:var(--text-muted);font-size:0.85rem;" data-en="Order Total:" data-ar="مجموع الطلب:">Order Total:</span>
-            <span style="color:var(--gold);font-family:var(--font-display);font-size:1.2rem;" id="payTotal">₹0</span>
+          <button class="pay-btn" onclick="processPayment()" id="rzpPayBtn">
+            🔒 &nbsp;PAY SECURELY WITH RAZORPAY
+          </button>
+          <div style="text-align:center;margin-top:12px;font-size:0.72rem;color:var(--text-muted);">
+            Secured by Razorpay · 256-bit SSL Encrypted
           </div>
-          <button class="pay-btn" onclick="processPayment()" data-en="CONFIRM & PAY" data-ar="تأكيد والدفع">CONFIRM & PAY</button>
         </div>
         <div class="success-msg" id="successMsg">
           <div class="success-icon">✅</div>
@@ -978,47 +967,106 @@ function goToPayment() {
   const total = cart.reduce((s,c) => s + c.price*c.qty, 0);
   const payTot = document.getElementById('payTotal');
   if(payTot) payTot.textContent = '₹'+total;
+  // Fill order summary
+  const summary = document.getElementById('rzpOrderSummary');
+  if(summary) {
+    summary.innerHTML = cart.map(c =>
+      '<div style="display:flex;justify-content:space-between;">' +
+      '<span>' + c.en + ' × ' + c.qty + '</span>' +
+      '<span style="color:var(--gold)">₹' + (c.price*c.qty) + '</span></div>'
+    ).join('');
+  }
+  // Reset pay button
+  const btn = document.getElementById('rzpPayBtn');
+  if(btn) { btn.disabled = false; btn.innerHTML = '🔒 &nbsp;PAY SECURELY WITH RAZORPAY'; }
+  document.getElementById('paymentContent').style.display = 'block';
+  document.getElementById('successMsg').style.display = 'none';
   showSection('payment');
 }
 
 function processPayment() {
-  const name = document.getElementById('payName')?.value;
-  const phone = document.getElementById('payPhone')?.value;
-  const addr = document.getElementById('payAddr')?.value;
-  if(!name || !phone || !addr) { showNotif('Please fill all required fields'); return; }
-  // Save order to localStorage
+  const name  = document.getElementById('payName')?.value.trim();
+  const phone = document.getElementById('payPhone')?.value.trim();
+  const email = document.getElementById('payEmail')?.value.trim();
+  const addr  = document.getElementById('payAddr')?.value.trim();
+  if(!name || !phone || !addr) { showNotif('⚠️ Please fill Name, Phone & Address'); return; }
+
+  const total = cart.reduce((s,c) => s + c.price * c.qty, 0);
+
+  // ── Razorpay Options ──────────────────────────────────────────────────────
+  const options = {
+    key: 'rzp_test_XXXXXXXXXXXXXXXX',   // 🔑 Replace with your Razorpay Key ID
+    amount: total * 100,                 // Amount in paise (₹1 = 100 paise)
+    currency: 'INR',
+    name: 'Al-Nakheel Restaurant',
+    description: 'Food Order – النخيل',
+    image: '',                           // Optional: URL to your logo
+    handler: function(response) {
+      // ✅ Payment success callback
+      saveOrderAfterPayment(name, phone, email, addr, total, response.razorpay_payment_id);
+    },
+    prefill: {
+      name:    name,
+      email:   email || '',
+      contact: phone
+    },
+    notes: {
+      delivery_address: addr
+    },
+    theme: {
+      color: '#C9A84C'                   // Matches your maroon brand color
+    },
+    modal: {
+      ondismiss: function() {
+        showNotif('Payment window closed. Try again!');
+        document.getElementById('rzpPayBtn').disabled = false;
+        document.getElementById('rzpPayBtn').textContent = '🔒  PAY SECURELY WITH RAZORPAY';
+      }
+    }
+  };
+
+  document.getElementById('rzpPayBtn').disabled = true;
+  document.getElementById('rzpPayBtn').textContent = 'Opening Razorpay...';
+
+  const rzp = new Razorpay(options);
+
+  rzp.on('payment.failed', function(response) {
+    showNotif('❌ Payment Failed: ' + response.error.description);
+    document.getElementById('rzpPayBtn').disabled = false;
+    document.getElementById('rzpPayBtn').textContent = '🔒  PAY SECURELY WITH RAZORPAY';
+  });
+
+  rzp.open();
+}
+
+function saveOrderAfterPayment(name, phone, email, addr, total, paymentId) {
+  // Save order
   const orders = JSON.parse(localStorage.getItem('alnakheel_orders') || '[]');
   orders.push({
     id: Date.now(),
-    name, phone, address: addr,
-    items: cart.map(c => `${c.en}×${c.qty}`).join(', '),
-    total: cart.reduce((s,c)=>s+c.price*c.qty,0),
-    payment: currentPayTab === 'upi' ? 'UPI' : 'Card',
+    name, phone, email,
+    address: addr,
+    items: cart.map(c => c.en + '×' + c.qty).join(', '),
+    total: total,
+    payment: 'Razorpay | ID: ' + paymentId,
     status: 'Pending',
     date: new Date().toLocaleString()
   });
   localStorage.setItem('alnakheel_orders', JSON.stringify(orders));
-  // Save customer
+  // Save / update customer
   const customers = JSON.parse(localStorage.getItem('alnakheel_customers') || '[]');
   const existing = customers.find(c => c.phone === phone);
   if(existing) existing.orders++;
-  else customers.push({name, phone, address: addr, orders: 1});
+  else customers.push({ name, phone, address: addr, orders: 1 });
   localStorage.setItem('alnakheel_customers', JSON.stringify(customers));
+  // Clear cart & show success
   cart = [];
+  renderCart();
   document.getElementById('paymentContent').style.display = 'none';
   document.getElementById('successMsg').style.display = 'block';
 }
 
-// ========================
-// PAYMENT TAB
-// ========================
-function switchPayTab(tab, btn) {
-  currentPayTab = tab;
-  document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('upiSection').style.display = tab==='upi' ? 'block' : 'none';
-  document.getElementById('cardSection').style.display = tab==='card' ? 'block' : 'none';
-}
+// Payment tabs removed – Razorpay handles all payment methods
 
 // ========================
 // BOOKING
